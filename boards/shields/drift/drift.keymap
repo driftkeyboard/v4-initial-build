@@ -1,0 +1,116 @@
+// Copyright (c) 2025 Timception
+// SPDX-License-Identifier: MIT
+
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500  // default: 600
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 20    // default: 10
+
+#include <dt-bindings/zmk/mouse.h>
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/pointing.h>
+
+#define BASE 0
+#define LOWER 1
+#define RAISE 2
+#define ADJUST 3
+
+/ {
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+
+        tri_layer {
+            if-layers = <LOWER RAISE>;
+            then-layer = <ADJUST>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            display-name = "base";
+
+            // -------------------------------------------------------------------------------------------------------------------
+            // | ESC   |   `   |  1  |  2  |  3  |   4   |   5   |               |   6   |   7   |   8   |  9  |  0  |  -  |  =  |
+            // | COPY  |  TAB  |  Q  |  W  |  E  |   R   |   T   |               |   Y   |   U   |   I   |  O  |  P  |  [  |  ]  |
+            // | GUI   | CAPS  |  A  |  S  |  D  |   F   |   G   |               |   H   |   J   |   K   |  L  |  ;  |  '  |ENTER|
+            // | CTRL  |  ALT  |  Z  |  X  |  C  |   V   |   B   | PASTE | |  \  |   N   |   M   |   ,   |  .  |  /  | ALT |CTRL |
+            //                                   | SHIFT | SPACE | LOWER |       | RAISE | SPACE | BKSPC |
+
+           bindings = <
+           &kp ESC    &kp GRAVE  &kp N1  &kp N2  &kp N3     &kp N4     &kp N5                               &kp N6     &kp N7     &kp N8     &kp N9   &kp N0    &kp MINUS  &kp EQUAL
+           &kp LC(C)  &kp TAB    &kp Q   &kp W   &kp E      &kp R      &kp T                                &kp Y      &kp U      &kp I      &kp O    &kp P     &kp LBKT   &kp RBKT
+           &kp LGUI   &kp CAPS   &kp A   &kp S   &kp D      &kp F      &kp G                                &kp H      &kp J      &kp K      &kp L    &kp SEMI  &kp SQT    &kp ENTER
+           &kp LCTRL  &kp LALT   &kp Z   &kp X   &kp C      &kp V      &kp B      &kp LC(V)  &kp BACKSLASH  &kp N      &kp M      &kp COMMA  &kp DOT  &kp FSLH  &kp RALT   &kp DEL
+                                                 &kp LSHFT  &kp SPACE  &mo LOWER                            &mo RAISE  &kp SPACE  &kp BSPC
+            >;
+
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_VOL_UP C_VOL_DN>;
+        };
+
+        lower_layer {
+            display-name = "lower";
+			
+	    // ----------------------------------------------------------------------------------------------------------------------------------------
+            // | ESC   |   `   |  F1  |  F2  |     F3     |   F4   |   F5  |               |   F6  |   F7  |      F8    |  F9 |  F10 |   F11  |  F12  |
+            // | COPY  |  TAB  |  Q   |  W   |     E      |   R    |   T   |               |   Y   |   U   |      I     |  O  |   P  |   [    |   \   |
+            // | GUI   | CAPS  |  A   |  S   |     D      |   F    |   G   |               |   H   |   J   |      K     |  L  |   ;  |   UP   | ENTER |
+            // | CTRL  |  ALT  |  Z   |  X   |     C      |   V    |   B   | VOL- | | VOL+ |   N   |   M   |      ,     |  .  | LEFT |  DOWN  | RIGHT |
+            //                               | BOOTLOADER | SPACE  | LOWER |               | RAISE | SPACE | BOOTLOADER |
+
+            bindings = <
+            &kp ESC    &kp GRAVE  &kp F1  &kp F2  &kp F3       &kp F4     &kp F5                              &kp F6  &kp F7     &kp F8     &kp F9   &kp F10         &kp F11         &kp F12
+            &trans     &kp TAB    &kp Q   &kp W   &kp E        &kp R      &kp T                               &kp Y   &kp U      &kp I      &kp O    &kp P           &kp LBKT        &kp BACKSLASH
+            &kp LGUI   &kp CAPS   &kp A   &kp S   &kp D        &kp F      &kp G                               &kp H   &kp J      &kp K      &kp L    &kp SEMI        &kp UP_ARROW    &kp ENTER
+            &kp LCTRL  &kp LALT   &kp Z   &kp X   &kp C        &kp V      &kp B   &kp C_VOL_DN  &kp C_VOL_UP  &kp N   &kp M      &kp COMMA  &kp DOT  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW
+                                                  &bootloader  &kp SPACE  &trans                              &trans  &kp SPACE  &bootloader
+            >;
+
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_VOL_UP C_VOL_DN>;
+        };
+
+        raise_layer {
+            display-name = "raise";
+
+            // -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+            // | CLEAR ALL | CLEAR | BT1 | BT2 |    BT3     |  BT4  |  BT5  |                   |   F6  |   F7  |     F8     |  F9 |    F10     |  SCROLL UP  | Mouse Button 4 |
+            // |   COPY    |  TAB  |  Q  |  W  |     E      |   R   |   T   |                   |   Y   |   U   |     I      |  O  |     P      | SCROLL DOWN |  MIDDLE CLICK  |
+            // |    GUI    | CAPS  |  A  |  S  |     D      |   F   |   G   |                   |   H   |   J   |     K      |  L  | LEFT CLICK |  MOUSE UP   |  RIGHT CLICK   |
+            // |   CTRL    |  ALT  |  Z  |  X  |     C      |   V   |   B   |  VOL-  | |  VOL+  |   N   |   M   |     ,      |  .  | MOUSE LEFT |  MOUSE DOWN |  MOUSE RIGHT   |
+            //                                 | BOOTLOADER | SPACE | LOWER |                   | RAISE | SPACE | BOOTLOADER |
+
+            bindings = <
+            &bt BT_CLR_ALL  &bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4                              &kp F6  &kp F7     &kp F8     &kp F9   &kp F10         &msc SCRL_UP    &mkp MB4
+            &trans          &kp TAB     &kp Q         &kp W         &kp E         &kp R         &kp T                                     &kp Y   &kp U      &kp I      &kp O    &kp P           &msc SCRL_DOWN  &mkp MCLK
+            &kp LGUI        &kp CAPS    &kp A         &kp S         &kp D         &kp F         &kp G                                     &kp H   &kp J      &kp K      &kp L    &mkp LCLK       &mmv MOVE_UP    &mkp RCLK
+            &kp LCTRL       &kp LALT    &kp Z         &kp X         &kp C         &kp V         &kp B         &kp C_VOL_DN  &kp C_VOL_UP  &kp N   &kp M      &kp COMMA  &kp DOT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT
+                                                                    &bootloader   &kp SPACE     &trans                                    &trans  &kp SPACE  &bootloader
+            >;
+
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_VOL_UP C_VOL_DN>;
+        };
+
+        adjust_layer {
+	    display-name = "adjust";
+
+            // -------------------------------------------------------------------------------------------------------------------------------------------------------
+            // | CLEAR ALL | CLEAR | BT1 | BT2 |   BT3 |  BT4  |  BT5  |                   |   F6  |   F7  |   F8  |  F9 |    F10     |  SCROLL UP  | Mouse Button 4 |
+            // |   COPY    |  TAB  |  Q  |  W  |   E   |   R   |   T   |                   |   Y   |   U   |   I   |  O  |     P      | SCROLL DOWN |  MIDDLE CLICK  |
+            // |    GUI    | CAPS  |  A  |  S  |   D   |   F   |   G   |                   |   H   |   J   |   K   |  L  | LEFT CLICK |  MOUSE UP   |  RIGHT CLICK   |
+            // |   CTRL    |  ALT  |  Z  |  X  |   C   |   V   |   B   |  VOL-  | |  VOL+  |   N   |   M   |   ,   |  .  | MOUSE LEFT |  MOUSE DOWN |  MOUSE RIGHT   |
+            //                                 | SHIFT | SPACE | LOWER |                   | RAISE | SPACE | BKSPC |
+
+            
+            bindings = <
+            &bt BT_CLR_ALL  &bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4                             &kp F6  &kp F7     &kp F8     &kp F9   &kp F10         &msc SCRL_UP    &mkp MB4
+            &trans          &kp TAB     &kp Q         &kp W         &kp E         &kp R         &kp T                                    &kp Y   &kp U      &kp I      &kp O    &kp P           &msc SCRL_DOWN  &mkp MCLK
+            &kp LGUI        &kp CAPS    &kp A         &kp S         &kp D         &kp F         &kp G                                    &kp H   &kp J      &kp K      &kp L    &mkp LCLK       &mmv MOVE_UP    &mkp RCLK
+            &kp LCTRL       &kp LALT    &kp Z         &kp X         &kp C         &kp V         &kp B        &kp C_VOL_DN  &kp C_VOL_UP  &kp N   &kp M      &kp COMMA  &kp DOT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT
+                                                                    &kp LSHFT     &kp SPACE     &trans                                   &trans  &kp SPACE  &kp BSPC
+	    >;
+
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN &inc_dec_kp C_VOL_UP C_VOL_DN>;
+        };
+    };
+};
