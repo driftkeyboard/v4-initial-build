@@ -4,7 +4,7 @@ on:
   push:               # automatically run on changes to following paths
     paths:
       - "boards/shields/drift/drift.keymap"
-      - "keymap_drawer.config.yaml"
+      - "keymap-drawer/drift.yaml"
       - "boards/shields/drift/drift.dtsi"
 
 jobs:
