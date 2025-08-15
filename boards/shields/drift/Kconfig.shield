@@ -1,7 +1,7 @@
-config SHIELD_drift_LEFT
+config SHIELD_DRIFT_LEFT
     def_bool $(shields_list_contains,drift_left)
 
-config SHIELD_drift_RIGHT
+config SHIELD_DRIFT_RIGHT
     def_bool $(shields_list_contains,drift_right)
 
 config SHIELD_DRIFT_CENTRAL_DONGLE
@@ -9,3 +9,4 @@ config SHIELD_DRIFT_CENTRAL_DONGLE
 
 config SHIELD_DRIFT_PERIPHERAL_LEFT
     def_bool $(shields_list_contains,drift_peripheral_left)
+
