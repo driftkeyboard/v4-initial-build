@@ -1,4 +1,4 @@
-# Drift Keyboard Wireless (by Timception)
+# Drift Keyboard V4 Initial Build (by Timception)
 
 This is the wireless ZMK version of the Drift Keyboard, an ortholinear 68-key split keyboard with mild columnar stagger.
 
@@ -13,4 +13,5 @@ You can see more actual builds [-=HERE=-](https://www.instagram.com/majin_keyboa
 
 
 ![Keymap](https://github.com/driftkeyboard/v4-initial-build/blob/main/keymap-drawer/drift.svg)
+
 
