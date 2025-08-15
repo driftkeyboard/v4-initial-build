@@ -3,9 +3,9 @@ on:
  workflow_dispatch:  # can be triggered manually
   push:               # automatically run on changes to following paths
     paths:
-      - "boards\shields\drift/drift.keymap"
+      - "boards/shields/drift/drift.keymap"
       - "keymap_drawer.config.yaml"
-      - "boards\shields\drift\drift.dtsi"
+      - "boards/shields/drift/drift.dtsi"
 
 jobs:
   draw:
